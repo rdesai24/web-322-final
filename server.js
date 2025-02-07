@@ -13,6 +13,7 @@ Cyclic Web App URL:
 GitHub Repository URL: 
 ********************************************************************************/
 
+
 const express = require("express");
 const path = require("path");
 const storeService = require("./store-service");
@@ -20,7 +21,7 @@ const storeService = require("./store-service");
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Serve static files from 'public' directory
+// Serve static files
 app.use(express.static("public"));
 
 // Redirect root to /about
@@ -33,25 +34,43 @@ app.get("/about", (req, res) => {
     res.sendFile(path.join(__dirname, "views/about.html"));
 });
 
-// Get all published items
+// Get all published items (for shop)
 app.get("/shop", (req, res) => {
     storeService.getPublishedItems()
-        .then(items => res.json(items))
-        .catch(err => res.status(404).json({ message: err }));
+        .then(items => {
+            if (items.length > 0) {
+                res.json(items);
+            } else {
+                res.status(404).json({ message: "No published items found" });
+            }
+        })
+        .catch(err => res.status(500).json({ message: err }));
 });
 
 // Get all items
 app.get("/items", (req, res) => {
     storeService.getAllItems()
-        .then(items => res.json(items))
-        .catch(err => res.status(404).json({ message: err }));
+        .then(items => {
+            if (items.length > 0) {
+                res.json(items);
+            } else {
+                res.status(404).json({ message: "No items found" });
+            }
+        })
+        .catch(err => res.status(500).json({ message: err }));
 });
 
 // Get all categories
 app.get("/categories", (req, res) => {
     storeService.getCategories()
-        .then(categories => res.json(categories))
-        .catch(err => res.status(404).json({ message: err }));
+        .then(categories => {
+            if (categories.length > 0) {
+                res.json(categories);
+            } else {
+                res.status(404).json({ message: "No categories found" });
+            }
+        })
+        .catch(err => res.status(500).json({ message: err }));
 });
 
 // Handle 404 errors
@@ -59,15 +78,13 @@ app.use((req, res) => {
     res.status(404).send("Page Not Found");
 });
 
-// Initialize the store service before starting the server
+// Initialize and start the server
 storeService.initialize()
     .then(() => {
         app.listen(PORT, () => {
-            console.log(`Express HTTP server listening on port ${PORT}`);
+            console.log(`Server listening on port ${PORT}`);
         });
     })
     .catch(err => {
-        console.error(`Failed to initialize: ${err}`);
+        console.error(`Initialization failed: ${err}`);
     });
-
-    

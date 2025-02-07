@@ -26,22 +26,31 @@ module.exports.initialize = function () {
 
 module.exports.getAllItems = function () {
     return new Promise((resolve, reject) => {
-        if (items.length > 0) resolve(items);
-        else reject("No results returned");
+        if (items.length > 0) {
+            resolve(items);
+        } else {
+            reject("No results returned");
+        }
     });
 };
 
 module.exports.getPublishedItems = function () {
     return new Promise((resolve, reject) => {
         let publishedItems = items.filter(item => item.published === true);
-        if (publishedItems.length > 0) resolve(publishedItems);
-        else reject("No results returned");
+        if (publishedItems.length > 0) {
+            resolve(publishedItems);
+        } else {
+            reject("No published items found");
+        }
     });
 };
 
 module.exports.getCategories = function () {
     return new Promise((resolve, reject) => {
-        if (categories.length > 0) resolve(categories);
-        else reject("No results returned");
+        if (categories.length > 0) {
+            resolve(categories);
+        } else {
+            reject("No results returned");
+        }
     });
 };
