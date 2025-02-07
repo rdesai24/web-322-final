@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 8080;
 // Serve static files
 app.use(express.static("public"));
 
-// Redirect root to /about
+// Redirect root (Homepage) to /about
 app.get("/", (req, res) => {
     res.redirect("/about");
 });
@@ -32,45 +32,6 @@ app.get("/", (req, res) => {
 // Serve About Page
 app.get("/about", (req, res) => {
     res.sendFile(path.join(__dirname, "views/about.html"));
-});
-
-// Get all published items (for shop)
-app.get("/shop", (req, res) => {
-    storeService.getPublishedItems()
-        .then(items => {
-            if (items.length > 0) {
-                res.json(items);
-            } else {
-                res.status(404).json({ message: "No published items found" });
-            }
-        })
-        .catch(err => res.status(500).json({ message: err }));
-});
-
-// Get all items
-app.get("/items", (req, res) => {
-    storeService.getAllItems()
-        .then(items => {
-            if (items.length > 0) {
-                res.json(items);
-            } else {
-                res.status(404).json({ message: "No items found" });
-            }
-        })
-        .catch(err => res.status(500).json({ message: err }));
-});
-
-// Get all categories
-app.get("/categories", (req, res) => {
-    storeService.getCategories()
-        .then(categories => {
-            if (categories.length > 0) {
-                res.json(categories);
-            } else {
-                res.status(404).json({ message: "No categories found" });
-            }
-        })
-        .catch(err => res.status(500).json({ message: err }));
 });
 
 // Handle 404 errors
