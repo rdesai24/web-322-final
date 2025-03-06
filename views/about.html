@@ -3,55 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/main.css">
+    <title>About Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            font-size: 1.5em;
+        }
+        nav {
+            background: #444;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 10px;
+            font-size: 1.2em;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 20px;
+            background: white;
+            margin: 20px auto;
+            width: 80%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background: #333;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">WEB322 - Rushabh Desai</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
-                <li class="nav-item"><a class="nav-link active" href="/about">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="/items">Items</a></li>
-                <li class="nav-item"><a class="nav-link" href="/categories">Categories</a></li>
-            </ul>
-        </div>
-    </div>
+<header>
+    About Us
+</header>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/items">Items</a>
+    <a href="/items/add">Add Item</a> <!-- ✅ New "Add Item" Link Added -->
 </nav>
 
-<!-- Main Content -->
-<div class="container mt-5">
-    <div class="row">
-        <!-- Left Column -->
-        <div class="col-md-8">
-            <h2>About</h2>
-            
-            <p>
-                Welcome To Web322 - My name is Rushabh Desai, and I am currently studying Copmuter Programming Analysis at Seneca College.
-                I have an interest in **web development, backend technologies, and eCommerce platforms. and This is My eCommerce Web app built using Exprerss.js,bootstrap, and  JASON data.
-            </p>
-        </div>
+<main>
+    <h1>Welcome to Our Store</h1>
+    <p>We provide high-quality products with a great selection for our customers. Our goal is to make shopping easy and enjoyable for everyone.</p>
 
-        <!-- Right Column -->
-        <div class="col-md-4">
-            <h2>Coming Soon</h2>
-            <p>Stay tuned for future updates on our store!</p>
-        </div>
-    </div>
-</div>
+    <h2>Our Mission</h2>
+    <p>To deliver the best products with exceptional customer service.</p>
 
-<!-- Bootstrap JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <h2>Contact Us</h2>
+    <p>Email: support@example.com</p>
+    <p>Phone: +1 (123) 456-7890</p>
+</main>
+
+<footer>
+    &copy; 2025 Our Store. All Rights Reserved.
+</footer>
 
 </body>
 </html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item</title>
+</head>
+<body>
+    <h1>Add a New Item</h1>
+    <form action="/items/add" method="POST" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea><br>
+
+        <label for="category">Category:</label>
+        <select id="category" name="category" required>
+            <option value="1">Category 1</option>
+            <option value="2">Category 2</option>
+            <option value="3">Category 3</option>
+            <option value="4">Category 4</option>
+            <option value="5">Category 5</option>
+        </select><br>
+
+        <label for="featureImage">Upload Image:</label>
+        <input type="file" id="featureImage" name="featureImage"><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
