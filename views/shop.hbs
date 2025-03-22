@@ -1,0 +1,41 @@
+{{#if data.post}}
+<article class="row mb-5">
+  <div class="col-md-8">
+    <h2 class="text-success">{{data.post.title}}</h2>
+    <img src="{{data.post.featureImage}}" class="img-fluid rounded shadow-sm mb-3" alt="Feature Image" />
+    <p>{{{safeHTML data.post.body}}}</p>
+    <p><strong>Category:</strong> {{data.post.category}}</p>
+    <p><strong>Price:</strong> ${{data.post.price}}</p>
+    <p><strong>Last Updated:</strong> {{data.post.postDate}}</p>
+  </div>
+
+  <div class="col-md-4">
+    {{#if data.posts}}
+    <h4>Other Items</h4>
+    <ul class="list-group mb-4">
+      {{#each data.posts}}
+      <li class="list-group-item">
+        <a href="/shop/{{id}}?category={{../viewingCategory}}">{{title}}</a>
+      </li>
+      {{/each}}
+    </ul>
+    {{/if}}
+
+    {{#if data.categories}}
+    <h4>Categories</h4>
+    <ul class="list-group">
+      {{#each data.categories}}
+      <li class="list-group-item">
+        <a href="/shop?category={{id}}">{{category}}</a>
+      </li>
+      {{/each}}
+    </ul>
+    {{/if}}
+  </div>
+</article>
+{{else}}
+<div class="text-center">
+  <h2>{{data.message}}</h2>
+  <p>Please try another product or category.</p>
+</div>
+{{/if}}

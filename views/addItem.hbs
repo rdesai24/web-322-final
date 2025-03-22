@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+    <h2 class="text-success mb-4">Add a New Product</h2>
+    <form method="POST" action="/items/add">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="body" class="form-label">Description</label>
+        <textarea name="body" class="form-control" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input type="number" name="price" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <input type="text" name="category" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="featureImage" class="form-label">Image URL</label>
+        <input type="text" name="featureImage" class="form-control" required />
+      </div>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="published" value="true" />
+        <label class="form-check-label">Publish Immediately</label>
+      </div>
+      <button type="submit" class="btn btn-success">Add Product</button>
+    </form>
+  </div>
+</div>

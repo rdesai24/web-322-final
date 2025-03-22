@@ -1,0 +1,38 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9f9f9;
+    color: #222;
+  }
+  
+  h2 {
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #28a745;
+  }
+  
+  .table th {
+    background-color: #f8f9fa;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    border-color: #1e7e34;
+  }
+  
+  .btn-success:hover {
+    background-color: #218838;
+    border-color: #1c7430;
+  }
+  
