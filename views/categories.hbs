@@ -1,30 +1,27 @@
-<div class="row">
-  <div class="col-md-12">
-    <h2 class="text-success">Tags</h2>
-    <hr />
-    {{#if categories}}
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead class="table-warning">
-          <tr>
-            <th>Tag ID</th>
-            <th>Tag Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each categories}}
-          <tr>
-            <td><a href="/items?category={{id}}">{{id}}</a></td>
-            <td><a href="/items?category={{id}}">{{category}}</a></td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    </div>
-    {{else}}
-    <div class="text-center">
-      <strong>{{message}}</strong>
-    </div>
-    {{/if}}
+<h2>Categories</h2>
+<a href="/categories/add" class="btn btn-success pull-right mb-3">Add Category</a>
+
+{{#if categories}}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Category</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each categories}}
+        <tr>
+          <td>{{id}}</td>
+          <td>{{category}}</td>
+          <td><a href="/categories/delete/{{id}}" class="btn btn-danger">Remove</a></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{else}}
+  <div class="text-center">
+    <strong>{{message}}</strong>
   </div>
-</div>
+{{/if}}
