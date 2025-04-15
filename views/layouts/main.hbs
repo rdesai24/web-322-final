@@ -31,11 +31,32 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav">
-            {{#navLink "/about"}}Our Story{{/navLink}}
-            {{#navLink "/shop"}}Storefront{{/navLink}}
-            {{#navLink "/items"}}Inventory{{/navLink}}
-            {{#navLink "/categories"}}Categories{{/navLink}}
-            {{#navLink "/items/add"}}Add Product{{/navLink}}
+           {{#navLink "/about"}}Our Story{{/navLink}}
+{{#navLink "/shop"}}Storefront{{/navLink}}
+
+{{#if session.user}}
+  {{#navLink "/items"}}Inventory{{/navLink}}
+  {{#navLink "/categories"}}Categories{{/navLink}}
+  {{#navLink "/items/add"}}Add Product{{/navLink}}
+
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      {{session.user.userName}}
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+      <li><a class="dropdown-item" href="/userHistory">User History</a></li>
+      <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+    </ul>
+  </li>
+{{else}}
+  <li class="nav-item">
+    <a class="nav-link btn btn-success text-white mx-1" href="/register">Register</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link btn btn-primary text-white" href="/login">Log In</a>
+  </li>
+{{/if}}
+
           </ul>
         </div>
       </div>

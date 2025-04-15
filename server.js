@@ -1,10 +1,10 @@
 /*********************************************************************************
- *  WEB322 – Assignment 05
- *  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  
+ *  WEB322 – Assignment 06
+ *  I declare that this assignment is my own work in accordance with Seneca Academic Policy.  
  *  No part of this assignment has been copied manually or electronically from any other source 
  *  (including web sites) or distributed to other students.
  *
- *  Name: Rushabh Desai       Student ID: 190713230      Date: 21 March 2025
+ *  Name: Rushabh Desai       Student ID: 190713230      Date: 10 April 2025
  *
  *  Cyclic Web App URL: __________________________________________
  *  GitHub Repository URL: https://github.senecapolytechnic.ca/rdesai24/web322-app.git
@@ -18,17 +18,31 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
-
+const authData = require("./auth-service");
+const clientSessions = require("client-sessions");
 require("dotenv").config();
 
-const app = express();
-const PORT = process.env.PORT || 3100;
 
+const app = express();
+const PORT = process.env.PORT || 3200;
+
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
 
-// Setup Handlebars
+app.use(clientSessions({
+  cookieName: "session",
+  secret: "yourSecretKey123",
+  duration: 2 * 60 * 1000,
+  activeDuration: 1000 * 60
+}));
+
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
+
+// Handlebars
 app.engine(
   ".hbs",
   exphbs.engine({
@@ -49,9 +63,7 @@ app.engine(
         );
       },
       equal: function (lvalue, rvalue, options) {
-        return lvalue !== rvalue
-          ? options.inverse(this)
-          : options.fn(this);
+        return lvalue !== rvalue ? options.inverse(this) : options.fn(this);
       },
       safeHTML: function (context) {
         if (typeof context !== "string") return "";
@@ -66,10 +78,9 @@ app.engine(
     }
   })
 );
-
 app.set("view engine", ".hbs");
 
-// Route tracker middleware
+// Track active route
 app.use((req, res, next) => {
   let route = req.path.substring(1);
   app.locals.activeRoute =
@@ -81,30 +92,32 @@ app.use((req, res, next) => {
   next();
 });
 
-// Setup multer and cloudinary (if used)
+// Middleware to protect routes
+function ensureLogin(req, res, next) {
+  if (!req.session.user) {
+    res.redirect("/login");
+  } else {
+    next();
+  }
+}
+
+// Multer
 const upload = multer(); // memory storage
 
 // ROUTES
 
-app.get("/", (req, res) => {
-  res.redirect("/shop");
-});
+app.get("/", (req, res) => res.redirect("/shop"));
 
-app.get("/about", (req, res) => {
-  res.render("about");
-});
+app.get("/about", (req, res) => res.render("about"));
 
-// Show add post form
-app.get("/Items/add", (req, res) => {
+// Add Post
+app.get("/Items/add", ensureLogin, (req, res) => {
   storeService.getCategories()
     .then((data) => res.render("addPost", { categories: data }))
     .catch(() => res.render("addPost", { categories: [] }));
 });
 
-// Handle new post
-app.post("/Items/add", (req, res) => {
-  console.log("🔍 Form Data:", req.body); // <== this will log the submitted values
-
+app.post("/Items/add", ensureLogin, (req, res) => {
   storeService.addItem(req.body)
     .then(() => res.redirect("/Items"))
     .catch((err) => {
@@ -113,14 +126,8 @@ app.post("/Items/add", (req, res) => {
     });
 });
 
-app.get("/debug/items", async (req, res) => {
-  const items = await storeService.getAllItems();
-  res.json(items);
-});
-
-
-// Show all items
-app.get("/Items", async (req, res) => {
+// Items List
+app.get("/Items", ensureLogin, async (req, res) => {
   try {
     const data = req.query.category
       ? await storeService.getItemsByCategory(req.query.category)
@@ -131,15 +138,15 @@ app.get("/Items", async (req, res) => {
   }
 });
 
-// Delete item
-app.get("/Items/delete/:id", (req, res) => {
+// Delete Item
+app.get("/Items/delete/:id", ensureLogin, (req, res) => {
   storeService.deletePostById(req.params.id)
     .then(() => res.redirect("/Items"))
     .catch(() => res.status(500).send("Unable to Remove Post / Post not found"));
 });
 
-// Show categories
-app.get("/categories", async (req, res) => {
+// Categories
+app.get("/categories", ensureLogin, async (req, res) => {
   try {
     const data = await storeService.getCategories();
     res.render("categories", { categories: data.length > 0 ? data : null, message: data.length ? null : "no results" });
@@ -148,26 +155,23 @@ app.get("/categories", async (req, res) => {
   }
 });
 
-// Show add category form
-app.get("/categories/add", (req, res) => {
+app.get("/categories/add", ensureLogin, (req, res) => {
   res.render("addCategory");
 });
 
-// Handle new category
-app.post("/categories/add", (req, res) => {
+app.post("/categories/add", ensureLogin, (req, res) => {
   storeService.addCategory(req.body)
     .then(() => res.redirect("/categories"))
     .catch(() => res.status(500).send("Unable to Add Category"));
 });
 
-// Delete category
-app.get("/categories/delete/:id", (req, res) => {
+app.get("/categories/delete/:id", ensureLogin, (req, res) => {
   storeService.deleteCategoryById(req.params.id)
     .then(() => res.redirect("/categories"))
     .catch(() => res.status(500).send("Unable to Remove Category / Category not found"));
 });
 
-// Shop view
+// Shop Views (Public)
 app.get("/shop", async (req, res) => {
   let viewData = {};
   try {
@@ -190,7 +194,6 @@ app.get("/shop", async (req, res) => {
   res.render("shop", { data: viewData, viewingCategory: req.query.category });
 });
 
-// View single item
 app.get("/shop/:id", async (req, res) => {
   let viewData = {};
   try {
@@ -216,16 +219,67 @@ app.get("/shop/:id", async (req, res) => {
   res.render("shop", { data: viewData, viewingCategory: req.query.category });
 });
 
-// 404 fallback
+// GET /register
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+// POST /register
+app.post("/register", (req, res) => {
+  authData.registerUser(req.body)
+    .then(() => res.render("register", { successMessage: "User created" }))
+    .catch(err => res.render("register", { errorMessage: err, userName: req.body.userName }));
+});
+
+// GET /login
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+// POST /login
+app.post("/login", (req, res) => {
+  req.body.userAgent = req.get("User-Agent");
+
+  authData.checkUser(req.body)
+    .then(user => {
+      req.session.user = {
+        userName: user.userName,
+        email: user.email,
+        loginHistory: user.loginHistory
+      };
+      res.redirect("/Items");
+    })
+    .catch(err => {
+      res.render("login", { errorMessage: err, userName: req.body.userName });
+    });
+});
+
+// GET /logout
+app.get("/logout", (req, res) => {
+  req.session.reset();
+  res.redirect("/");
+});
+
+// GET /userHistory
+app.get("/userHistory", ensureLogin, (req, res) => {
+  res.render("userHistory");
+});
+
+
+// 404
 app.use((req, res) => {
   res.status(404).render("404");
 });
 
-// Start server
 storeService.initialize()
+  .then(authData.initialize)
   .then(() => {
-    app.listen(PORT, () => console.log(`✅ Server running at http://localhost:${PORT}`));
+    app.listen(PORT, () => {
+      console.log(`✅ Server running at http://localhost:${PORT}`);
+    });
   })
-  .catch(err => {
-    console.error(" Failed to start server:", err?.message || err);
+  .catch((err) => {
+    console.error("❌ Failed to start server:", err.message || err);
   });
+
+
