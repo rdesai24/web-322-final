@@ -121,7 +121,7 @@ app.post("/Items/add", ensureLogin, (req, res) => {
   storeService.addItem(req.body)
     .then(() => res.redirect("/Items"))
     .catch((err) => {
-      console.error("❌ Unable to add item:", err);
+      console.error(" Unable to add item:", err);
       res.status(500).send("Unable to add item");
     });
 });
@@ -275,11 +275,11 @@ storeService.initialize()
   .then(authData.initialize)
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`✅ Server running at http://localhost:${PORT}`);
+      console.log(` Server running at http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
-    console.error("❌ Failed to start server:", err.message || err);
+    console.error("Failed to start server:", err.message || err);
   });
 
 
